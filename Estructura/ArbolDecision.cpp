@@ -1,29 +1,42 @@
 #include "ArbolDecision.h"
 using namespace std;
 
+
 ArbolDecision::ArbolDecision() {
     raiz = new NodoDecision("Edad menor a 14?");
-
     raiz->si = new NodoDecision("", "Pediatria");
-    raiz->no = new NodoDecision("Trauma == 1?");
 
-    raiz->no->si = new NodoDecision("Requiere cirugia == 1?");
-    raiz->no->si->si = new NodoDecision("", "Cirugia");
-    raiz->no->si->no = new NodoDecision("", "Traumatologia");
+    NodoDecision* trauma = new NodoDecision("Trauma == 1?");
+    raiz->no = trauma;
 
-    raiz->no->no = new NodoDecision("Sintomas neurologicos == 1?");
-    raiz->no->no->si = new NodoDecision("", "Neurologia");
+    NodoDecision* cirugia = new NodoDecision("Requiere cirugia == 1?");
+    trauma->si = cirugia;
 
-    raiz->no->no->no = new NodoDecision("Temperatura >= 39?");
-    raiz->no->no->no->si = new NodoDecision("", "Urgencias");
+    cirugia->si = new NodoDecision("", "Cirugia");
+    cirugia->no = new NodoDecision("", "Traumatologia");
 
-    raiz->no->no->no->no = new NodoDecision("Presion arterial >= 140?");
-    raiz->no->no->no->no->si = new NodoDecision("", "Cardiologia");
+    NodoDecision* neurologia = new NodoDecision("Sintomas neurologicos == 1?");
+    trauma->no = neurologia;
 
-    raiz->no->no->no->no->no = new NodoDecision("Dias hospitalizado > 0?");
-    raiz->no->no->no->no->no->si = new NodoDecision("", "Hospitalizacion");
-    raiz->no->no->no->no->no->no = new NodoDecision("", "Medicina General");
+    neurologia->si = new NodoDecision("", "Neurologia");
+
+    NodoDecision* temperatura = new NodoDecision("Temperatura >= 39?");
+    neurologia->no = temperatura;
+
+    temperatura->si = new NodoDecision("", "Urgencias");
+
+    NodoDecision* presion = new NodoDecision("Presion arterial >= 140?");
+    temperatura->no = presion;
+
+    presion->si = new NodoDecision("", "Cardiologia");
+
+    NodoDecision* hospitalizacion = new NodoDecision("Dias hospitalizado > 0?");
+    presion->no = hospitalizacion;
+
+    hospitalizacion->si = new NodoDecision("", "Hospitalizacion");
+    hospitalizacion->no = new NodoDecision("", "Medicina General");
 }
+
 
 ArbolDecision::~ArbolDecision() {
     liberar(raiz);
