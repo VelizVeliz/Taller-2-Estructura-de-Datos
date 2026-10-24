@@ -1,8 +1,15 @@
 #include "ArbolDecision.h"
+#include <iostream>
+
 using namespace std;
 
+// Funciones auxiliares para recorridos
+void preOrdenAux(NodoDecision* nodo);
+void inOrdenAux(NodoDecision* nodo);
+void postOrdenAux(NodoDecision* nodo);
 
 ArbolDecision::ArbolDecision() {
+
     raiz = new NodoDecision("Edad menor a 14?");
     raiz->si = new NodoDecision("", "Pediatria");
 
@@ -37,12 +44,12 @@ ArbolDecision::ArbolDecision() {
     hospitalizacion->no = new NodoDecision("", "Medicina General");
 }
 
-
 ArbolDecision::~ArbolDecision() {
     liberar(raiz);
 }
 
 void ArbolDecision::liberar(NodoDecision* nodo) {
+
     if (nodo == nullptr) {
         return;
     }
@@ -52,3 +59,107 @@ void ArbolDecision::liberar(NodoDecision* nodo) {
 
     delete nodo;
 }
+
+string ArbolDecision::clasificar(Paciente paciente) {
+
+    if (paciente.edad < 14) {
+        return "Pediatria";
+    }
+
+    if (paciente.trauma == 1) {
+
+        if (paciente.necesitaCirugia == 1) {
+            return "Cirugia";
+        }
+
+        return "Traumatologia";
+    }
+
+    if (paciente.sintomasNeurologicos == 1) {
+        return "Neurologia";
+    }
+
+    if (paciente.temperatura >= 39) {
+        return "Urgencias";
+    }
+
+    if (paciente.presionArterial >= 140) {
+        return "Cardiologia";
+    }
+
+    if (paciente.diasHospitalizado > 0) {
+        return "Hospitalizacion";
+    }
+
+    return "Medicina General";
+}
+
+//Como preorden, inorden y postorden son recursivos y no necesitan parámetros 
+//se crean funciones auxiliares para que el usuario pueda llamarlas sin necesidad de pasarle un nodo como parámetro.
+
+void ArbolDecision::preOrden() {
+    preOrdenAux(raiz);
+}
+
+void ArbolDecision::inOrden() {
+    inOrdenAux(raiz);
+}
+
+void ArbolDecision::postOrden() {
+    postOrdenAux(raiz);
+}
+
+// Funciones auxiliares para los recorridos
+
+void preOrdenAux(NodoDecision* nodo) {
+
+    if (nodo == nullptr) {
+        return;
+    }
+
+    if (nodo->pregunta != "") {
+        cout << nodo->pregunta << endl;
+    }
+    else {
+        cout << nodo->servicio << endl;
+    }
+
+    preOrdenAux(nodo->si);
+    preOrdenAux(nodo->no);
+}
+
+void inOrdenAux(NodoDecision* nodo) {
+
+    if (nodo == nullptr) {
+        return;
+    }
+
+    inOrdenAux(nodo->si);
+
+    if (nodo->pregunta != "") {
+        cout << nodo->pregunta << endl;
+    }
+    else {
+        cout << nodo->servicio << endl;
+    }
+
+    inOrdenAux(nodo->no);
+}
+
+void postOrdenAux(NodoDecision* nodo) {
+
+    if (nodo == nullptr) {
+        return;
+    }
+
+    postOrdenAux(nodo->si);
+    postOrdenAux(nodo->no);
+
+    if (nodo->pregunta != "") {
+        cout << nodo->pregunta << endl;
+    }
+    else {
+        cout << nodo->servicio << endl;
+    }
+}
+
