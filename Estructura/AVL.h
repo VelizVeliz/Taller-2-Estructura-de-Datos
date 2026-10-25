@@ -39,12 +39,36 @@ private:
     // Eliminacion recursiva. 'eliminado' indica si el ID existia.
     NodoAVL* eliminar(NodoAVL* nodo, const string& id, bool& eliminado);
 
+    // --- Recorridos y memoria ---
+ 
+    // Agrega "Nombre (ID)" al final de 'salida', separado por ", " del anterior.
+    void agregarPaciente(NodoAVL* nodo, string& salida);
+ 
+    void inOrden(NodoAVL* nodo, string& salida);
+    void preOrden(NodoAVL* nodo, string& salida);
+    void postOrden(NodoAVL* nodo, string& salida);
+ 
+    // Libera todos los nodos del subarbol (en postorden).
+    void liberar(NodoAVL* nodo);
+
 
 public:
 
     AVL();
 
+    ~AVL();
+
+    
+    AVL(const AVL&) = delete;
+    AVL& operator=(const AVL&) = delete;
+
     void insertar(Paciente paciente);
+    
+    string inOrden();
+    
+    string preOrden();
+    
+    string postOrden();
 
     // Busca un paciente por ID. Devuelve el nodo o nullptr si no existe.
     NodoAVL* buscar(const string& id);

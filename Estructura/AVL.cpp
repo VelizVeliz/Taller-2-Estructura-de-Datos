@@ -323,3 +323,96 @@ bool AVL::eliminar(const string& id)
     raiz = eliminar(raiz, id, eliminado);
     return eliminado;
 }
+
+
+//  RECORRIDOS
+ 
+// Agrega un paciente a la cadena de salida con el formato "Nombre (ID)".
+void AVL::agregarPaciente(NodoAVL* nodo, string& salida)
+{
+    if (!salida.empty())
+    {
+        salida += ", ";
+    }
+ 
+    salida += nodo->paciente.nombre + " (" + nodo->paciente.id + ")";
+}
+ 
+// Inorden: izquierda -> raiz -> derecha.
+// En un AVL ordenado por ID, esto entrega los pacientes de menor a mayor ID.
+void AVL::inOrden(NodoAVL* nodo, string& salida)
+{
+    if (nodo == nullptr)
+    {
+        return;
+    }
+ 
+    inOrden(nodo->izquierda, salida);
+    agregarPaciente(nodo, salida);
+    inOrden(nodo->derecha, salida);
+}
+ 
+// Preorden: raiz -> izquierda -> derecha.
+void AVL::preOrden(NodoAVL* nodo, string& salida)
+{
+    if (nodo == nullptr)
+    {
+        return;
+    }
+ 
+    agregarPaciente(nodo, salida);
+    preOrden(nodo->izquierda, salida);
+    preOrden(nodo->derecha, salida);
+}
+ 
+// Postorden: izquierda -> derecha -> raiz.
+void AVL::postOrden(NodoAVL* nodo, string& salida)
+{
+    if (nodo == nullptr)
+    {
+        return;
+    }
+ 
+    postOrden(nodo->izquierda, salida);
+    postOrden(nodo->derecha, salida);
+    agregarPaciente(nodo, salida);
+}
+ 
+string AVL::inOrden()
+{
+    string salida;
+    inOrden(raiz, salida);
+    return salida;
+}
+ 
+string AVL::preOrden()
+{
+    string salida;
+    preOrden(raiz, salida);
+    return salida;
+}
+ 
+string AVL::postOrden()
+{
+    string salida;
+    postOrden(raiz, salida);
+    return salida;
+}
+ 
+
+//  LIBERACION DE MEMORIA
+ 
+// Se borran primero los hijos y al final el nodo (postorden); si se
+// borrara el nodo antes, se perderian los punteros a sus hijos.
+void AVL::liberar(NodoAVL* nodo)
+{
+    if (nodo == nullptr)
+    {
+        return;
+    }
+ 
+    liberar(nodo->izquierda);
+    liberar(nodo->derecha);
+ 
+    delete nodo;
+}
