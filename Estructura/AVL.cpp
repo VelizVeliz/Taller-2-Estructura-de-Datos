@@ -416,3 +416,7 @@ void AVL::liberar(NodoAVL* nodo)
  
     delete nodo;
 }
+
+AVL::~AVL() {
+    liberar(raiz);
+}
